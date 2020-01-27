@@ -4,7 +4,10 @@
  * Имеет свойство HOST, равно 'https://bhj-diplom.letsdocode.ru'.
  * */
 class Entity {
-
+  constructor() {
+    this.URL = '';
+    this.HOST = 'https://bhj-diplom.letsdocode.ru';
+  }
   /**
    * Запрашивает с сервера список данных.
    * Это могут быть счета или доходы/расходы
@@ -39,4 +42,3 @@ class Entity {
 
   }
 }
-
