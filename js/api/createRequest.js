@@ -10,7 +10,7 @@ const createRequest = (options = {}) => {
     xhr.open( options.method , options.url );
   }
   xhr.responseType = options.responseType;
-  //xhr.withCredentials = true;
+  xhr.withCredentials = true;
   if (options.headers) {
     for( header in options.headers ) {
       xhr.setRequestHeader(header , options.headers[header]);
@@ -27,12 +27,14 @@ const createRequest = (options = {}) => {
   }
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status == 200) {
-      console.log(xhr.response);
-      return xhr.response;
+      // console.log(xhr.response);
+      // return xhr.response;
+      options.callback( null , xhr.response );
     }
     if (xhr.readyState === 4 && xhr.status != 200) {
-      return xhr.response;
-      console.log(xhr.statusText);
+      // return xhr.response;
+      // console.log(xhr.statusText);
+      options.callback( response );
     }
   }
 };
