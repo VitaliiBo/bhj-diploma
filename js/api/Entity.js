@@ -13,12 +13,15 @@ class Entity {
    * Это могут быть счета или доходы/расходы
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static list( data, callback ) {
+  static list( data, callback = f => f ) {
     createRequest({
       data: data,
       responseType: 'json',
       method: 'GET',
-      callback: callback
+      callback: ( err , response ) => {
+        console.log(err);
+        console.log(response);
+      }
     })
   }
 
@@ -34,7 +37,7 @@ class Entity {
       data: modifiedData,
       responseType: 'json',
       method: 'POST',
-      callback: callback
+      callback:  (response) => response
     })
   }
 
@@ -49,7 +52,7 @@ class Entity {
       data: modifiedData,
       responseType: 'json',
       method: 'GET',
-      callback: callback
+      callback: (response) => response
     })
   }
 
@@ -64,7 +67,7 @@ class Entity {
       data: modifiedData,
       responseType: 'json',
       method: 'POST',
-      callback: callback
+      callback: (response) => response
     })
   }
 }

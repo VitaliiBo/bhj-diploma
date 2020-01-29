@@ -6,18 +6,18 @@
  * */
 class User {
   constructor(){
-    this.HOST = Entity.HOST;
-    this.URL = '/user';
+    let HOST = 'https://bhj-diplom.letsdocode.ru';
+    let URL = '/user';
   }
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
   static setCurrent(user) {
-    localStorage.setItem( 'user' , user );
+    localStorage.setItem( 'user' , String(user) );
   }
 
-  /**
+  /* *
    * Удаляет информацию об авторизованном
    * пользователе из локального хранилища.
    * */
@@ -30,21 +30,27 @@ class User {
    * из локального хранилища
    * */
   static current() {
-    return localStorage.getItem('user');
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   /**
    * Получает информацию о текущем
    * авторизованном пользователе.
    * */
-  static fetch( data, callback ) {
+  static fetch( data, callback = f => f ) {
     createRequest({
-      url: this.HOST + this.URL,
+      url: this.HOST + this.URL + '/current',
       data: data,
       responseType: 'json',
       method: 'GET',
       callback: (response) => {
-
+        if (response.success === true){
+          User.setCurrent(response.user)
+          return response;
+        } else if (response.success === false) {
+          User.unsetCurrent()
+          return response;
+        }
       }
     })
   }
@@ -66,7 +72,13 @@ class User {
    * User.setCurrent.
    * */
   static register( data, callback = f => f ) {
+    createRequest({
+      url: this.HOST + this.URL + '/register',
+      data: data,
+      responseType: 'json',
+      method: 'POST',
 
+    })
   }
 
   /**

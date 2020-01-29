@@ -37,4 +37,5 @@ const createRequest = (options = {}) => {
       options.callback( xhr.response );
     }
   }
+  console.log(options.url);
 };
