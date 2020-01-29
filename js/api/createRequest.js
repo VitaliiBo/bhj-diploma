@@ -34,7 +34,7 @@ const createRequest = (options = {}) => {
     if (xhr.readyState === 4 && xhr.status != 200) {
       // return xhr.response;
       // console.log(xhr.statusText);
-      options.callback( response );
+      options.callback( xhr.response );
     }
   }
 };
