@@ -6,6 +6,6 @@
 class Account extends Entity {
   constructor(){
     super();
-    this.URL = '/account';
   }
+  static URL = '/account';
 }

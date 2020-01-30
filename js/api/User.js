@@ -5,10 +5,12 @@
  * Имеет свойство URL, равное '/user'.
  * */
 class User {
-  constructor(){
-    let HOST = 'https://bhj-diplom.letsdocode.ru';
-    let URL = '/user';
-  }
+  // constructor(){
+  //   let HOST = 'https://bhj-diplom.letsdocode.ru';
+  //   let URL = '/user';
+  // }
+  static HOST = 'https://bhj-diplom.letsdocode.ru';
+  static URL = '/user';
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
@@ -30,7 +32,17 @@ class User {
    * из локального хранилища
    * */
   static current() {
-    return JSON.parse(localStorage.getItem('user'));
+    if (localStorage.getItem('user')) {
+      return JSON.parse(localStorage.getItem('user'));
+    } else {
+      return {
+        data:{
+          user: 'test',
+          email: 'test@test',
+          password: 'test'
+        }
+      };
+    }
   }
 
   /**
@@ -42,8 +54,12 @@ class User {
       url: this.HOST + this.URL + '/current',
       data: data,
       responseType: 'json',
+      headers: {
+        'Content-type': 'application/json',
+      },
       method: 'GET',
       callback: (response) => {
+        console.log(response);
         if (response.success === true){
           User.setCurrent(response.user)
           return response;
@@ -77,7 +93,11 @@ class User {
       data: data,
       responseType: 'json',
       method: 'POST',
-
+      callback: (response) => {
+        if (response.success = true) {
+          User.setCurrent(response.user);
+        }
+      }
     })
   }
 
