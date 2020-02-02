@@ -28,7 +28,17 @@ class User {
    * из локального хранилища
    * */
   static current() {
-    return JSON.parse(localStorage.getItem('user'));
+    if (localStorage.getItem('user')) {
+      return JSON.parse(localStorage.getItem('user'));
+    } else {
+      return {
+        data:{
+          user: 'test',
+          email: 'test@test',
+          password: 'test'
+        }
+      };
+    }
   }
 
   /**
@@ -40,6 +50,9 @@ class User {
       url: this.HOST + this.URL + '/current',
       data: data,
       responseType: 'json',
+      headers: {
+        'Content-type': 'application/json',
+      },
       method: 'GET',
       callback: (response) => {
         if (response != null) {
@@ -83,6 +96,7 @@ class User {
         console.log(response);
         if (response.success === true) {
           console.log(this);
+          User.setCurrent(response.user);
         }
       }
     })

@@ -16,6 +16,7 @@ const createRequest = (options = {}) => {
       xhr.setRequestHeader(header , options.headers[header]);
     }
   }
+  console.log(xhr);
   if (options.method === 'GET') {
     xhr.send();
   } else {
@@ -33,9 +34,8 @@ const createRequest = (options = {}) => {
     }
     if (xhr.readyState === 4 && xhr.status != 200) {
       // return xhr.response;
-      // console.log(xhr.statusText);
+      console.log(xhr.status);
       options.callback( xhr.response );
     }
   }
-  console.log(options.url);
 };
