@@ -5,10 +5,8 @@
  * Имеет свойство URL, равное '/user'.
  * */
 class User {
-  constructor(){
-    let HOST = 'https://bhj-diplom.letsdocode.ru';
-    let URL = '/user';
-  }
+  static HOST = 'https://bhj-diplom.letsdocode.ru';
+  static URL = '/user';
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
@@ -44,12 +42,16 @@ class User {
       responseType: 'json',
       method: 'GET',
       callback: (response) => {
-        if (response.success === true){
-          User.setCurrent(response.user)
-          return response;
-        } else if (response.success === false) {
-          User.unsetCurrent()
-          return response;
+        if (response != null) {
+          if (response.success === true){
+            User.setCurrent(response.user)
+            return response;
+          } else if (response.success === false) {
+            User.unsetCurrent()
+            return response;
+          }
+        } else {
+          console.log(response);
         }
       }
     })
@@ -77,7 +79,12 @@ class User {
       data: data,
       responseType: 'json',
       method: 'POST',
-
+      callback: (err , response) => {
+        console.log(response);
+        if (response.success === true) {
+          console.log(this);
+        }
+      }
     })
   }
 
@@ -86,6 +93,17 @@ class User {
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
   static logout( data, callback = f => f ) {
-
+    createRequest({
+      url: this.HOST + this.URL +'/logout',
+      data: data,
+      responseType: 'json',
+      method: 'POST',
+      callback: (response) => {
+        if (response.success === true) {
+          User.unsetCurrent();
+          App.setState('init');
+        }
+      }
+    })
   }
 }
