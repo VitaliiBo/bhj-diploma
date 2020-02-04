@@ -31,14 +31,8 @@ class User {
     if (localStorage.getItem('user')) {
       return JSON.parse(localStorage.getItem('user'));
     } else {
-      return {
-        data:{
-          user: 'test',
-          email: 'test@test',
-          password: 'test'
-        }
-      };
-    }
+      return undefined;
+      }
   }
 
   /**
@@ -50,22 +44,18 @@ class User {
       url: this.HOST + this.URL + '/current',
       data: data,
       responseType: 'json',
-      headers: {
-        'Content-type': 'application/json',
-      },
       method: 'GET',
-      callback: (response) => {
-        if (response != null) {
+      callback: (err , response) => {
           if (response.success === true){
+            console.log('fetch true');
             User.setCurrent(response.user)
             return response;
           } else if (response.success === false) {
+            console.log('fetch false');
             User.unsetCurrent()
             return response;
           }
-        } else {
-          console.log(response);
-        }
+
       }
     })
   }
@@ -77,7 +67,21 @@ class User {
    * User.setCurrent.
    * */
   static login( data, callback = f => f ) {
-
+    createRequest({
+      url: this.HOST + this.URL + '/login',
+      data: data,
+      responseType: 'json',
+      method: 'POST',
+      callback: (err, response) => {
+        if (response.success === true) {
+          console.log(response);
+          User.setCurrent(response.user);
+          App.setState( 'user-logged' );
+          App.modals.login.element.querySelector('form').reset();
+          App.modals.login.element.style.display = null;
+        }
+      }
+    })
   }
 
   /**
@@ -99,6 +103,7 @@ class User {
           User.setCurrent(response.user);
           App.setState( 'user-logged' );
           App.modals.register.element.querySelector('form').reset();
+          App.modals.register.element.style.display = null;
         }
       }
     })
@@ -114,7 +119,7 @@ class User {
       data: data,
       responseType: 'json',
       method: 'POST',
-      callback: (response) => {
+      callback: (err , response) => {
         if (response.success === true) {
           User.unsetCurrent();
           App.setState('init');

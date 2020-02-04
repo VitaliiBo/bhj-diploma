@@ -4,6 +4,7 @@
  * */
 const createRequest = (options = {}) => {
   let xhr = new XMLHttpRequest();
+  console.log(options.data);
   let modifiedData = options.data;
   for( data in options.data ){
     if ( data === 'email'){
@@ -11,7 +12,7 @@ const createRequest = (options = {}) => {
     }
   }
   if (options.data && options.method === 'GET') {
-    xhr.open( options.method , `${options.url}?mail=${modifiedData.username}&password=${modifiedData.password}` );
+    xhr.open( options.method , options.url );
   } else {
     xhr.open( options.method , options.url );
   }
