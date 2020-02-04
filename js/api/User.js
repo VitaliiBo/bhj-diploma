@@ -12,7 +12,7 @@ class User {
    * локальном хранилище.
    * */
   static setCurrent(user) {
-    localStorage.setItem( 'user' , String(user) );
+    localStorage.setItem( 'user' , JSON.stringify(user) );
   }
 
   /* *
@@ -97,6 +97,8 @@ class User {
         if (response.success === true) {
           console.log(this);
           User.setCurrent(response.user);
+          App.setState( 'user-logged' );
+          App.modals.register.element.querySelector('form').reset();
         }
       }
     })
