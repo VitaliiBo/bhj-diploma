@@ -11,7 +11,7 @@ class RegisterForm extends AsyncForm {
    * и закрывает окно, в котором находится форма
    * */
   onSubmit( options ) {
-    console.log(this);
+    // console.log(this);
     User.register(options)
   }
 }

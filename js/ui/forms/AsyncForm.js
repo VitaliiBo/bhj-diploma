@@ -40,7 +40,14 @@ class AsyncForm {
    * }
    * */
   getData() {
-    return new FormData(this.element);
+    let formData = new FormData(this.element);
+    // formData.append( this.element.name.name , this.element.name.value );
+    // formData.append( this.element.email.name , this.element.email.value );
+    // formData.append( this.element.password.name , this.element.password.value );
+    for (let key of formData.entries()) {
+      formData[key[0]] = key[1];
+    }
+    return formData;
   }
 
   onSubmit( options ) {
@@ -52,11 +59,8 @@ class AsyncForm {
    * данные, полученные из метода getData()
    * */
   submit() {
-    this.onSubmit( {
-      url: this.element.action,
-      method: this.element.method,
-      data: this.getData()
-      }
+    this.onSubmit(
+      this.getData()
     )
   }
 }

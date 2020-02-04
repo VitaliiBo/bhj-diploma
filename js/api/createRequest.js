@@ -4,8 +4,14 @@
  * */
 const createRequest = (options = {}) => {
   let xhr = new XMLHttpRequest();
-  if (options.data) {
-    xhr.open( options.method , `${options.url}?mail=${options.data.username}&password=${options.data.password}` );
+  let modifiedData = options.data;
+  for( data in options.data ){
+    if ( data === 'email'){
+      modifiedData = Object.assign({ username: options.data[data] }, options.data);
+    }
+  }
+  if (options.data && options.method === 'GET') {
+    xhr.open( options.method , `${options.url}?mail=${modifiedData.username}&password=${modifiedData.password}` );
   } else {
     xhr.open( options.method , options.url );
   }
@@ -16,19 +22,22 @@ const createRequest = (options = {}) => {
       xhr.setRequestHeader(header , options.headers[header]);
     }
   }
-  console.log(xhr);
   if (options.method === 'GET') {
     xhr.send();
   } else {
     let formData = new FormData();
-    for( data in options.data ){
-      formData.append( data , options.data[data] )
+    for( key in modifiedData ) {
+      formData.append( key , modifiedData[key])
     }
+    // xhr.send( options.data )
+    // xhr.send( modifiedData );
+    console.log(xhr);
     xhr.send( formData );
+
   }
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status == 200) {
-      // console.log(xhr.response);
+      console.log(xhr.response);
       // return xhr.response;
       options.callback( null , xhr.response );
     }
