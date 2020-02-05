@@ -8,11 +8,23 @@ const createRequest = (options = {}) => {
   let modifiedData = options.data;
   for( data in options.data ){
     if ( data === 'email'){
-      modifiedData = Object.assign({ username: options.data[data] }, options.data);
+      modifiedData = Object.assign({ mail: options.data[data] }, options.data);
     }
   }
   if (options.data && options.method === 'GET') {
-    xhr.open( options.method , options.url );
+
+    let userData = '';
+    for ( let key in options.data ){
+      if(key == 'id' || key == 'email' || key == 'name' ){
+        if (userData.length < 1) {
+          userData += `${key}=${options.data[key]}`
+        } else {
+          userData += `&${key}=${options.data[key]}`
+        }
+      }
+    }
+    
+    xhr.open( options.method , `${options.url}?+${userData}` );
   } else {
     xhr.open( options.method , options.url );
   }

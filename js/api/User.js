@@ -40,6 +40,7 @@ class User {
    * авторизованном пользователе.
    * */
   static fetch( data, callback = f => f ) {
+    console.log(data);
     createRequest({
       url: this.HOST + this.URL + '/current',
       data: data,
@@ -48,14 +49,17 @@ class User {
       callback: (err , response) => {
           if (response.success === true){
             console.log('fetch true');
-            User.setCurrent(response.user)
+            console.log(response);
+            App.setState( 'user-logged' );
+            // User.setCurrent(response.user)
             return response;
           } else if (response.success === false) {
+            console.log(response);
             console.log('fetch false');
-            User.unsetCurrent()
-            return response;
+            App.setState( 'init' );
+            // User.unsetCurrent()
+            // return response;
           }
-
       }
     })
   }

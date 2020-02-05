@@ -4,10 +4,9 @@
  * Имеет свойство HOST, равно 'https://bhj-diplom.letsdocode.ru'.
  * */
 class Entity {
-  constructor() {
-    this.URL = '';
-    this.HOST = 'https://bhj-diplom.letsdocode.ru';
-  }
+
+  static HOST = 'https://bhj-diplom.letsdocode.ru';
+  static URL = '';
   /**
    * Запрашивает с сервера список данных.
    * Это могут быть счета или доходы/расходы
@@ -37,7 +36,9 @@ class Entity {
       data: modifiedData,
       responseType: 'json',
       method: 'POST',
-      callback:  (response) => response
+      callback:  (err , response) => {
+      console.log(response);
+      }
     })
   }
 
@@ -52,7 +53,9 @@ class Entity {
       data: modifiedData,
       responseType: 'json',
       method: 'GET',
-      callback: (response) => response
+      callback: ( err , response) => {
+        console.log(response);
+      }
     })
   }
 
@@ -67,7 +70,9 @@ class Entity {
       data: modifiedData,
       responseType: 'json',
       method: 'POST',
-      callback: (response) => response
+      callback: (err , response) => {
+        console.log(response);
+      }
     })
   }
 }
