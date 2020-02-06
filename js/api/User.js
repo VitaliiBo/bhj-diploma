@@ -50,12 +50,14 @@ class User {
           if (response.success === true){
             console.log('fetch true');
             console.log(response);
+            User.setCurrent(response.user)
             App.setState( 'user-logged' );
             // User.setCurrent(response.user)
             return response;
           } else if (response.success === false) {
             console.log(response);
             console.log('fetch false');
+            User.unsetCurrent();
             App.setState( 'init' );
             // User.unsetCurrent()
             // return response;

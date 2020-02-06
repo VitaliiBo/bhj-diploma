@@ -17,6 +17,7 @@ class AsyncForm {
     if (this.element != null) {
       this.registerEvents();
     } else {
+      console.log(element);
       console.log('ОШИБКА AsyncForm');
     }
   }
