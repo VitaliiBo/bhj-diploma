@@ -14,12 +14,14 @@ class Entity {
    * */
   static list( data, callback = f => f ) {
     createRequest({
+      url: this.HOST + this.URL,
       data: data,
       responseType: 'json',
       method: 'GET',
       callback: ( err , response ) => {
         console.log(err);
         console.log(response);
+        response.data.forEach(item => this.renderItem(item));
       }
     })
   }
