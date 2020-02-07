@@ -23,7 +23,7 @@ const createRequest = (options = {}) => {
         }
       }
     }
-    
+
     xhr.open( options.method , `${options.url}?+${userData}` );
   } else {
     xhr.open( options.method , options.url );

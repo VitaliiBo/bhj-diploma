@@ -12,7 +12,7 @@ class Entity {
    * Это могут быть счета или доходы/расходы
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static list( data, callback = f => f ) {
+  static list( data, callback ) {
     createRequest({
       url: this.HOST + this.URL,
       data: data,
@@ -21,7 +21,7 @@ class Entity {
       callback: ( err , response ) => {
         console.log(err);
         console.log(response);
-        response.data.forEach(item => this.renderItem(item));
+        callback(response);
       }
     })
   }

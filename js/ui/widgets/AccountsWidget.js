@@ -49,8 +49,8 @@ class AccountsWidget {
    * */
   update() {
     if (User.current != undefined) {
-      this.clear();
-      Account.list(User.current());
+
+      Account.list(User.current() , (item) => { console.log(item.success ,'жесть' , this); this.clear(); }  );
     }
   }
 
@@ -60,7 +60,7 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    console.log(App.widgets.accounts.querySelectorAll('.account'));
+    console.log(App.widgets.accounts);
   }
 
   /**
