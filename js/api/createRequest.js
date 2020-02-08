@@ -4,7 +4,7 @@
  * */
 const createRequest = (options = {}) => {
   let xhr = new XMLHttpRequest();
-  console.log(options.data);
+  // console.log(options.data);
   let modifiedData = options.data;
   for( data in options.data ){
     if ( data === 'email'){

@@ -11,14 +11,19 @@ class TransactionsPage {
    * через registerEvents()
    * */
   constructor( element ) {
-
+    if (element != undefined) {
+      this.element = element;
+      this.registerEvents();
+    } else {
+      console.log('TransactionsPage element null');
+    }
   }
 
   /**
    * Вызывает метод render для отрисовки страницы
    * */
   update() {
-
+      this.render();
   }
 
   /**
@@ -28,7 +33,14 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
-
+    document.querySelector('.remove-account').addEventListener('click' , (e) => {
+      e.preventDefault();
+      this.removeAccount();
+    });
+    document.querySelectorAll('.transaction__remove').forEach( item => item.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.removeTransaction(item['data-id']);
+    }))
   }
 
   /**
@@ -40,7 +52,16 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
+    if (confirm(`Вы действительно хотите удалить счёт ?`)) {
+      Account.remove( User.current() , (response) => {
+        if (response.success === true) {
+          App.update();
+          this.clear();
+        }
+      } );
+    } else {
 
+    }
   }
 
   /**
@@ -49,7 +70,16 @@ class TransactionsPage {
    * По удалению транзакции вызовите метод App.update()
    * */
   removeTransaction( id ) {
+    if (confirm(`Вы действительно хотите удалить транзакцию ?`)) {
+      Transaction.remove( id, User.current() , (response) => {
+        if (response.success === true) {
+          App.update();
+          this.clear();
+        }
+      } );
+    } else {
 
+    }
   }
 
   /**
@@ -59,6 +89,16 @@ class TransactionsPage {
    * в TransactionsPage.renderTransactions()
    * */
   render( options ) {
+    if (options != undefined) {
+      console.log( options );
+      Account.get( options.account_id , User.current(), (response) => {
+        console.log(response);
+        this.renderTitle(response.data.name);
+      } );
+      Transaction.list( User.current(), (response) => {
+        this.renderTransactions( response.data );
+      } )
+    }
 
   }
 

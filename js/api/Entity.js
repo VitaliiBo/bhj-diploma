@@ -27,7 +27,7 @@ class Entity {
    * на сервер. (в зависимости от того,
    * что наследуется от Entity)
    * */
-  static create( data, callback = f => f ) {
+  static create( data, callback ) {
     let modifiedData = Object.assign({ _method: 'PUT' }, data );
     createRequest({
       url: this.HOST + this.URL,
@@ -42,16 +42,17 @@ class Entity {
    * Получает информацию о счёте или доходе/расходе
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static get( id = '', data, callback = f => f ) {
-    let modifiedData = Object.assign({ id: id }, data );
+  static get( id , data, callback = f => f ) {
+    console.log(id);
+    let modifiedData = data;
+    modifiedData.id = id; //Object.assign({ id: id }, data );
+    console.log(modifiedData);
     createRequest({
       url: this.HOST + this.URL,
       data: modifiedData,
       responseType: 'json',
       method: 'GET',
-      callback: ( err , response) => {
-        console.log(response);
-      }
+      callback: (err , response) => callback(response)
     })
   }
 
@@ -59,16 +60,14 @@ class Entity {
    * Удаляет информацию о счёте или доходе/расходе
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static remove( id = '', data, callback = f => f ) {
+  static remove( id , data, callback = f => f ) {
     let modifiedData = Object.assign({ id: id, _method: 'DELETE' }, data );
     createRequest({
       url: this.HOST + this.URL,
       data: modifiedData,
       responseType: 'json',
       method: 'POST',
-      callback: (err , response) => {
-        console.log(response);
-      }
+      callback: (err , response) => callback(response)
     })
   }
 }

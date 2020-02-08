@@ -17,6 +17,7 @@ class CreateAccountForm extends AsyncForm {
       if(response.success === true){
         App.forms.createAccount.element.reset();
         App.modals.createAccount.element.style.display = '';
+        App.update();
       }
     } );
   }
