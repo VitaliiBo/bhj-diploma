@@ -32,9 +32,14 @@ class AccountsWidget {
    * */
   registerEvents() {
     document.querySelector('.create-account').onclick = () => {
-      console.log(App.modals.createAccount);
-      App.modals.createAccount.element.style.display = 'block';
+      App.getModal('createAccount').element.style.display = 'block';
     }
+    this.onSelectAccount = this.onSelectAccount.bind( this );
+    this.element.querySelectorAll('.account').forEach(item => item.onclick = (e) => {
+      e.preventDefault();
+      console.log(this);
+      this.onSelectAccount(this);
+    })
   }
 
   /**
@@ -48,9 +53,13 @@ class AccountsWidget {
    * метода renderItem()
    * */
   update() {
-    if (User.current != undefined) {
-
-      Account.list(User.current() , (item) => { console.log(item.success ,'жесть' , this); this.clear(); }  );
+    if (User.current != null) {
+      Account.list(User.current() , (item) => {
+        this.clear();
+        item.data.forEach( key => this.renderItem(key) )
+      });
+    } else {
+      console.log(this , 'ERROR');
     }
   }
 
@@ -60,7 +69,7 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    console.log(App.widgets.accounts);
+    this.element.querySelectorAll('.account').forEach(item => item.outerHTML = '');
   }
 
   /**
@@ -71,6 +80,9 @@ class AccountsWidget {
    * Вызывает App.showPage( 'transactions', { account_id: id_счёта });
    * */
   onSelectAccount( element ) {
+    let accounts = this.element.querySelectorAll('.account');
+    accounts.forEach(item => item.forEach(item => item.classList.remove('active')));
+      element.classList.add('active');
 
   }
 
@@ -90,6 +102,15 @@ class AccountsWidget {
    * и добавляет его внутрь элемента виджета
    * */
   renderItem( item ) {
-
+    item.forEach( key => {
+      App.widgets.acconts.element.insertAdjacentHTML('beforeEnd' , `
+      <li class="account">
+          <a href="#">
+              <span>QIWI</span> /
+              <span>20.31 ₽</span>
+          </a>
+      </li>
+      `)
+    })
   }
 }

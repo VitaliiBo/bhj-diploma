@@ -18,11 +18,7 @@ class Entity {
       data: data,
       responseType: 'json',
       method: 'GET',
-      callback: ( err , response ) => {
-        console.log(err);
-        console.log(response);
-        callback(response);
-      }
+      callback: (err , response) => callback(response)
     })
   }
 
@@ -38,9 +34,7 @@ class Entity {
       data: modifiedData,
       responseType: 'json',
       method: 'POST',
-      callback:  (err , response) => {
-      console.log(response);
-      }
+      callback: (err , response) => callback(response)
     })
   }
 

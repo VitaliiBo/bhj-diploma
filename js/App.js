@@ -63,6 +63,7 @@ class App {
    * Инициализирует виджеты
    * */
   static initWidgets() {
+    debugger
     this.widgets = {
       accounts: new AccountsWidget( document.querySelector( '.accounts-panel' )),
       transactions: new TransactionsWidget( document.querySelector( '.transactions-panel' )),
