@@ -44,8 +44,7 @@ class Entity {
    * */
   static get( id , data, callback = f => f ) {
     console.log(id);
-    let modifiedData = data;
-    modifiedData.id = id; //Object.assign({ id: id }, data );
+    let modifiedData = Object.assign( id, data );
     console.log(modifiedData);
     createRequest({
       url: this.HOST + this.URL,
@@ -61,7 +60,10 @@ class Entity {
    * (в зависимости от того, что наследуется от Entity)
    * */
   static remove( id , data, callback = f => f ) {
-    let modifiedData = Object.assign({ id: id, _method: 'DELETE' }, data );
+    console.log(id);
+    let modifiedData = Object.assign({ _method: 'DELETE' }, data );
+    modifiedData = Object.assign( id , modifiedData );
+    console.log(modifiedData);
     createRequest({
       url: this.HOST + this.URL,
       data: modifiedData,

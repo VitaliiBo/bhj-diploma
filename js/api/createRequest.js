@@ -15,7 +15,7 @@ const createRequest = (options = {}) => {
 
     let userData = '';
     for ( let key in options.data ){
-      if(key == 'id' || key == 'email' || key == 'name' ){
+      if(key == 'id' || key == 'email' || key == 'name' || key == 'account_id' ){
         if (userData.length < 1) {
           userData += `${key}=${options.data[key]}`
         } else {
@@ -24,7 +24,7 @@ const createRequest = (options = {}) => {
       }
     }
 
-    xhr.open( options.method , `${options.url}?+${userData}` );
+    xhr.open( options.method , `${options.url}?${userData}` );
   } else {
     xhr.open( options.method , options.url );
   }

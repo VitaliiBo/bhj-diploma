@@ -53,7 +53,8 @@ class TransactionsPage {
    * */
   removeAccount() {
     if (confirm(`Вы действительно хотите удалить счёт ?`)) {
-      Account.remove( User.current() , (response) => {
+      let accountId = { account_id: document.querySelector('.account.active').dataset['id'] };
+      Account.remove( accountId , User.current() , (response) => {
         if (response.success === true) {
           App.update();
           this.clear();
@@ -91,11 +92,17 @@ class TransactionsPage {
   render( options ) {
     if (options != undefined) {
       console.log( options );
-      Account.get( options.account_id , User.current(), (response) => {
+      Account.get( options , User.current(), (response) => {
         console.log(response);
-        this.renderTitle(response.data.name);
+        for( let key in response.data){
+          if(response.data[key].id === options.account_id){
+            this.renderTitle(response.data[key].name);
+          } else {
+            console.log(key);
+          }
+        }
       } );
-      Transaction.list( User.current(), (response) => {
+      Transaction.list( options, (response) => {
         this.renderTransactions( response.data );
       } )
     }
@@ -108,14 +115,15 @@ class TransactionsPage {
    * Устанавливает заголовок: «Название счёта»
    * */
   clear() {
-
+    TransactionsPage.renderTransactions([]);
+    this.renderTitle('Название счёта');
   }
 
   /**
    * Устанавливает заголовок в элемент .content-title
    * */
   renderTitle( name ) {
-
+    document.querySelector('.content-title').innerHTML = name ;
   }
 
   /**
