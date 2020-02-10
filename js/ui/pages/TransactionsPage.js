@@ -53,8 +53,8 @@ class TransactionsPage {
    * */
   removeAccount() {
     if (confirm(`Вы действительно хотите удалить счёт ?`)) {
-      let accountId = { account_id: document.querySelector('.account.active').dataset['id'] };
-      Account.remove( accountId , User.current() , (response) => {
+      let accountId = { id: document.querySelector('.account.active').dataset['id'] };
+      Account.remove( accountId , {} , (response) => {
         if (response.success === true) {
           App.update();
           this.clear();
@@ -72,7 +72,7 @@ class TransactionsPage {
    * */
   removeTransaction( id ) {
     if (confirm(`Вы действительно хотите удалить транзакцию ?`)) {
-      Transaction.remove( id, User.current() , (response) => {
+      Transaction.remove( { id: id }, {} , (response) => {
         if (response.success === true) {
           App.update();
           this.clear();
@@ -103,6 +103,7 @@ class TransactionsPage {
         }
       } );
       Transaction.list( options, (response) => {
+        console.log(response);
         this.renderTransactions( response.data );
       } )
     }
@@ -115,7 +116,7 @@ class TransactionsPage {
    * Устанавливает заголовок: «Название счёта»
    * */
   clear() {
-    TransactionsPage.renderTransactions([]);
+    this.renderTransactions([]);
     this.renderTitle('Название счёта');
   }
 
@@ -131,7 +132,9 @@ class TransactionsPage {
    * в формат «10 марта 2019 г. в 03:20»
    * */
   formatDate( date ) {
+    let d = new Date( date );
 
+    return  `${d.toLocaleString('ru', { day: "numeric", month: "long", year: "numeric" })} в ${d.toLocaleString('ru', {hour: "numeric", minute: "numeric" })}`;
   }
 
   /**
@@ -139,6 +142,38 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML( item ) {
+    console.log(item);
+    let transaction = '';
+    if (item.type === 'income') {
+      transaction = 'transaction_income';
+    } else {
+      transaction = 'transaction_expense';
+    }
+    let date = this.formatDate(item.updated_at);
+    return `<div class="transaction ${transaction} row">
+        <div class="col-md-7 transaction__details">
+          <div class="transaction__icon">
+              <span class="fa fa-money fa-2x"></span>
+          </div>
+          <div class="transaction__info">
+              <h4 class="transaction__title">${item.name}</h4>
+              <!-- дата -->
+              <div class="transaction__date">${date}</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="transaction__summ">
+          <!--  сумма -->
+              ${item.sum} <span class="currency">₽</span>
+          </div>
+        </div>
+        <div class="col-md-2 transaction__controls">
+            <!-- в data-id нужно поместить id -->
+            <button class="btn btn-danger transaction__remove" data-id="${item.account_id}">
+                <i class="fa fa-trash"></i>
+            </button>
+        </div>
+      </div>`;
 
   }
 
@@ -147,6 +182,10 @@ class TransactionsPage {
    * используя getTransactionHTML
    * */
   renderTransactions( data ) {
+    console.log(data);
+    data.forEach( item => {
 
+      this.element.querySelector('.content').insertAdjacentHTML('beforeEnd', this.getTransactionHTML(item));
+    } )
   }
 }
