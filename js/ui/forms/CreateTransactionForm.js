@@ -37,8 +37,8 @@ class CreateTransactionForm extends AsyncForm {
   onSubmit( options ) {
     Transaction.create( options , (response) => {
       this.element.reset();
-      this.element.closest('.modal').style.display = '';
       App.update();
+      this.element.closest('.modal').style.display = '';
     } )
   }
 }

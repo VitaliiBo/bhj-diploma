@@ -23,7 +23,9 @@ class TransactionsPage {
    * Вызывает метод render для отрисовки страницы
    * */
   update() {
-      this.render();
+    if (document.querySelector('.account.active') != null) {
+      this.render({account_id: document.querySelector('.account.active').dataset['id'] });
+    }
   }
 
   /**
@@ -33,14 +35,17 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
-    document.querySelector('.remove-account').addEventListener('click' , (e) => {
-      e.preventDefault();
-      this.removeAccount();
-    });
+      document.querySelector('.remove-account').addEventListener('click' , (e) => {
+        e.preventDefault();
+        this.removeAccount();
+      });
+  }
+
+  registerTransactionEvents() {
     document.querySelectorAll('.transaction__remove').forEach( item => item.addEventListener('click', (e) => {
       e.preventDefault();
-      this.removeTransaction(item['data-id']);
-    }))
+      this.removeTransaction(item.dataset['id']);
+    }));
   }
 
   /**
@@ -53,13 +58,15 @@ class TransactionsPage {
    * */
   removeAccount() {
     if (confirm(`Вы действительно хотите удалить счёт ?`)) {
-      let accountId = { id: document.querySelector('.account.active').dataset['id'] };
-      Account.remove( accountId , {} , (response) => {
-        if (response.success === true) {
-          App.update();
-          this.clear();
-        }
-      } );
+      if (document.querySelector('.account.active') != null) {
+        let accountId = { id: document.querySelector('.account.active').dataset['id'] };
+        Account.remove( accountId , {} , (response) => {
+          if (response.success === true) {
+            App.update();
+            this.clear();
+          }
+        });
+      }
     } else {
 
     }
@@ -75,7 +82,6 @@ class TransactionsPage {
       Transaction.remove( { id: id }, {} , (response) => {
         if (response.success === true) {
           App.update();
-          this.clear();
         }
       } );
     } else {
@@ -105,6 +111,7 @@ class TransactionsPage {
       Transaction.list( options, (response) => {
         console.log(response);
         this.renderTransactions( response.data );
+        this.registerTransactionEvents();
       } )
     }
 
@@ -133,7 +140,6 @@ class TransactionsPage {
    * */
   formatDate( date ) {
     let d = new Date( date );
-
     return  `${d.toLocaleString('ru', { day: "numeric", month: "long", year: "numeric" })} в ${d.toLocaleString('ru', {hour: "numeric", minute: "numeric" })}`;
   }
 
@@ -169,7 +175,7 @@ class TransactionsPage {
         </div>
         <div class="col-md-2 transaction__controls">
             <!-- в data-id нужно поместить id -->
-            <button class="btn btn-danger transaction__remove" data-id="${item.account_id}">
+            <button class="btn btn-danger transaction__remove" data-id="${item.id}">
                 <i class="fa fa-trash"></i>
             </button>
         </div>
@@ -182,10 +188,10 @@ class TransactionsPage {
    * используя getTransactionHTML
    * */
   renderTransactions( data ) {
-    console.log(data);
+    this.element.querySelector('.content').innerHTML = '';
     data.forEach( item => {
 
-      this.element.querySelector('.content').insertAdjacentHTML('beforeEnd', this.getTransactionHTML(item));
+      this.element.querySelector('.content').insertAdjacentHTML('afterBegin', this.getTransactionHTML(item));
     } )
   }
 }
