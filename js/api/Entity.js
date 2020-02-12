@@ -21,7 +21,6 @@ class Entity {
       callback: (err , response) => callback(response)
     })
   }
-
   /**
    * Создаёт счёт или доход/расход с помощью запроса
    * на сервер. (в зависимости от того,
@@ -45,7 +44,6 @@ class Entity {
   static get( id , data, callback = f => f ) {
     console.log(id);
     let modifiedData = Object.assign( id, data );
-    console.log(modifiedData);
     createRequest({
       url: this.HOST + this.URL,
       data: modifiedData,
@@ -54,7 +52,6 @@ class Entity {
       callback: (err , response) => callback(response)
     })
   }
-
   /**
    * Удаляет информацию о счёте или доходе/расходе
    * (в зависимости от того, что наследуется от Entity)
@@ -63,8 +60,7 @@ class Entity {
     console.log(id);
     let modifiedData = Object.assign({ _method: 'DELETE' }, data );
     modifiedData = Object.assign( id , modifiedData );
-    console.log(modifiedData);
-    createRequest({
+     createRequest({
       url: this.HOST + this.URL,
       data: modifiedData,
       responseType: 'json',

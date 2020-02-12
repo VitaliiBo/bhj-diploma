@@ -34,7 +34,6 @@ class User {
       return undefined;
       }
   }
-
   /**
    * Получает информацию о текущем
    * авторизованном пользователе.
@@ -52,20 +51,16 @@ class User {
             console.log(response);
             User.setCurrent(response.user)
             App.setState( 'user-logged' );
-            // User.setCurrent(response.user)
             return response;
           } else if (response.success === false) {
             console.log(response);
             console.log('fetch false');
             User.unsetCurrent();
             App.setState( 'init' );
-            // User.unsetCurrent()
-            // return response;
           }
       }
     })
   }
-
   /**
    * Производит попытку авторизации.
    * После успешной авторизации необходимо
@@ -89,7 +84,6 @@ class User {
       }
     })
   }
-
   /**
    * Производит попытку регистрации пользователя.
    * После успешной авторизации необходимо
@@ -111,10 +105,12 @@ class User {
           App.modals.register.element.querySelector('form').reset();
           App.modals.register.element.style.display = null;
         }
+        if (response.success === false) {
+          alert(response.error);
+        }
       }
     })
   }
-
   /**
    * Производит выход из приложения. После успешного
    * выхода необходимо вызвать метод User.unsetCurrent

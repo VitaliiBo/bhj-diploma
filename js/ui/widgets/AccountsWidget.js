@@ -20,7 +20,6 @@ class AccountsWidget {
     } else {
       console.log('Ошибка constructor AccountsWidget element === null');
     }
-
   }
 
   /**
@@ -48,15 +47,15 @@ class AccountsWidget {
    * */
   update() {
     if (User.current != null) {
-      Account.list(User.current() , (item) => {
-        this.clear();
-        item.data.forEach( key => this.renderItem(key) );
-          // this.onSelectAccount = this.onSelectAccount.bind( this );
+      Account.list(User.current() , (response) => {
+        if (response.success === true) {
+          this.clear();
+          response.data.forEach( key => this.renderItem(key) );
           document.querySelectorAll('.account').forEach( item => item.addEventListener('click',  (e) => {
             e.preventDefault();
-            console.log(item);
             this.onSelectAccount(item);
           }))
+        }
       });
     } else {
       console.log(this , 'ERROR');
@@ -69,7 +68,6 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    console.log(this.element.querySelectorAll('.account'));
     this.element.querySelectorAll('.account').forEach(item => item.outerHTML = '');
   }
 

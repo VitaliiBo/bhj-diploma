@@ -12,22 +12,22 @@ class CreateTransactionForm extends AsyncForm {
     super(element);
     this.renderAccountsList();
   }
-
   /**
    * Получает список счетов с помощью Account.list
    * Обновляет в форме всплывающего окна выпадающий список
    * */
   renderAccountsList() {
     Account.list( User.current(), (response) => {
-      this.element.querySelector('select').innerHTML = '';
-      response.data.forEach( item => {
-        this.element.querySelector('select').insertAdjacentHTML('beforeEnd',`
-        <option value="${item.id}">${item.name}: ${item.sum}</option>
-        `)
-      } )
-    } )
+      if (response.success === true) {
+        this.element.querySelector('select').innerHTML = '';
+        response.data.forEach( item => {
+          this.element.querySelector('select').insertAdjacentHTML('beforeEnd',`
+          <option value="${item.id}">${item.name}: ${item.sum}</option>
+          `)
+        } );
+      }
+    } );
   }
-
   /**
    * Создаёт новую транзакцию (доход или расход)
    * с помощью Transaction.create. По успешному результату
@@ -36,9 +36,13 @@ class CreateTransactionForm extends AsyncForm {
    * */
   onSubmit( options ) {
     Transaction.create( options , (response) => {
-      this.element.reset();
-      App.update();
-      this.element.closest('.modal').style.display = '';
+      if (response.success === true) {
+        this.element.reset();
+        App.update();
+        this.element.closest('.modal').style.display = '';
+      } else {
+        console.log('CreateTransactionForm onSubmit Err');
+      }
     } )
   }
 }

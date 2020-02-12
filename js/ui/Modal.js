@@ -16,13 +16,11 @@ class Modal {
     this.element = element;
     if (this.element != undefined) {
       this.registerEvents();
-      // console.log(this);
     } else {
       console.log('Ошибка');
       alert('Ошибка');
     }
   }
-
   /**
    * При нажатии на элемент с data-dismiss="modal"
    * должен закрыть текущее окно
@@ -32,25 +30,21 @@ class Modal {
     this.onClose = this.onClose.bind( this );
     this.element.querySelectorAll('[data-dismiss="modal"]')
     .forEach(item => item.addEventListener('click' , this.onClose ))
-
   }
-
   /**
    * Срабатывает после нажатия на элементы, закрывающие окно.
    * Закрывает текущее окно (Modal.close())
    * */
   onClose( e ) {
     e.preventDefault();
-
     this.close();
-    // this.unregisterEvents();
   }
   /**
    * Удаляет обработчики событий
    * */
   unregisterEvents() {
     this.element.querySelectorAll('[data-dismiss="modal"]')
-    .forEach(item => item.removeEventListener('click' , this.onClose ))
+    .forEach(item => item.removeEventListener('click' , this.onClose ))    // Не нашёл приминение этому методу #comment
   }
   /**
    * Открывает окно: устанавливает CSS-свойство display
@@ -63,7 +57,7 @@ class Modal {
    * Закрывает окно: удаляет CSS-свойство display
    * */
   close() {
-    console.log(this);
     this.element.style.display = null;
+    this.element.querySelector('form').reset();
   }
 }

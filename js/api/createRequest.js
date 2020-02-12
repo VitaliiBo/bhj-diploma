@@ -4,7 +4,6 @@
  * */
 const createRequest = (options = {}) => {
   let xhr = new XMLHttpRequest();
-  // console.log(options.data);
   let modifiedData = options.data;
   for( data in options.data ){
     if ( data === 'email'){
@@ -12,7 +11,6 @@ const createRequest = (options = {}) => {
     }
   }
   if (options.data && options.method === 'GET') {
-
     let userData = '';
     for ( let key in options.data ){
       if(key == 'id' || key == 'email' || key == 'name' || key == 'account_id' ){
@@ -23,7 +21,6 @@ const createRequest = (options = {}) => {
         }
       }
     }
-
     xhr.open( options.method , `${options.url}?${userData}` );
   } else {
     xhr.open( options.method , options.url );
@@ -42,21 +39,13 @@ const createRequest = (options = {}) => {
     for( key in modifiedData ) {
       formData.append( key , modifiedData[key])
     }
-    // xhr.send( options.data )
-    // xhr.send( modifiedData );
-    console.log(xhr);
     xhr.send( formData );
-
   }
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status == 200) {
-      console.log(xhr.response);
-      // return xhr.response;
       options.callback( null , xhr.response );
     }
     if (xhr.readyState === 4 && xhr.status != 200) {
-      // return xhr.response;
-      console.log(xhr.status);
       options.callback( xhr.response );
     }
   }

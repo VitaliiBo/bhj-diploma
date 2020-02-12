@@ -23,9 +23,7 @@ class TransactionsPage {
    * Вызывает метод render для отрисовки страницы
    * */
   update() {
-    if (document.querySelector('.account.active') != null) {
-      this.render({account_id: document.querySelector('.account.active').dataset['id'] });
-    }
+      this.render({account_id: document.querySelector('.content-title').dataset['account_id'] });
   }
 
   /**
@@ -58,15 +56,13 @@ class TransactionsPage {
    * */
   removeAccount() {
     if (confirm(`Вы действительно хотите удалить счёт ?`)) {
-      if (document.querySelector('.account.active') != null) {
-        let accountId = { id: document.querySelector('.account.active').dataset['id'] };
+        let accountId = { id: document.querySelector('.content-title').dataset['account_id'] };
         Account.remove( accountId , {} , (response) => {
           if (response.success === true) {
             App.update();
             this.clear();
           }
         });
-      }
     } else {
 
     }
@@ -99,17 +95,14 @@ class TransactionsPage {
     if (options != undefined) {
       console.log( options );
       Account.get( options , User.current(), (response) => {
-        console.log(response);
         for( let key in response.data){
           if(response.data[key].id === options.account_id){
-            this.renderTitle(response.data[key].name);
+            this.renderTitle(response.data[key].name , response.data[key].id);
           } else {
-            console.log(key);
           }
         }
       } );
       Transaction.list( options, (response) => {
-        console.log(response);
         this.renderTransactions( response.data );
         this.registerTransactionEvents();
       } )
@@ -130,8 +123,9 @@ class TransactionsPage {
   /**
    * Устанавливает заголовок в элемент .content-title
    * */
-  renderTitle( name ) {
+  renderTitle( name , id ) {
     document.querySelector('.content-title').innerHTML = name ;
+    document.querySelector('.content-title').dataset['account_id'] = id ;
   }
 
   /**
@@ -148,7 +142,6 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML( item ) {
-    console.log(item);
     let transaction = '';
     if (item.type === 'income') {
       transaction = 'transaction_income';
@@ -190,7 +183,6 @@ class TransactionsPage {
   renderTransactions( data ) {
     this.element.querySelector('.content').innerHTML = '';
     data.forEach( item => {
-
       this.element.querySelector('.content').insertAdjacentHTML('afterBegin', this.getTransactionHTML(item));
     } )
   }

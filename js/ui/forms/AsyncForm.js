@@ -17,11 +17,9 @@ class AsyncForm {
     if (this.element != null) {
       this.registerEvents();
     } else {
-      console.log(element);
       console.log('ОШИБКА AsyncForm');
     }
   }
-
   /**
    * Необходимо запретить отправку формы. В момент отправки
    * вызывает метод submit()
@@ -32,7 +30,6 @@ class AsyncForm {
       this.submit();
     }
   }
-
   /**
    * Преобразует данные формы в объект вида
    * {
@@ -42,19 +39,14 @@ class AsyncForm {
    * */
   getData() {
     let formData = new FormData(this.element);
-    // formData.append( this.element.name.name , this.element.name.value );
-    // formData.append( this.element.email.name , this.element.email.value );
-    // formData.append( this.element.password.name , this.element.password.value );
     for (let key of formData.entries()) {
       formData[key[0]] = key[1];
     }
     return formData;
   }
-
   onSubmit( options ) {
     console.log(options);
   }
-
   /**
    * Вызывает метод onSubmit и передаёт туда
    * данные, полученные из метода getData()
